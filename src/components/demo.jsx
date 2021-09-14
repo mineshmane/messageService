@@ -17,6 +17,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import TextField from '@material-ui/core/TextField';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined'
 import Flag from '../assets/imgsvg/flag.svg'
+import Badge from '@material-ui/core/Badge';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -83,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function MiniDrawer() {
+export default function Demo() {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -101,7 +103,7 @@ export default function MiniDrawer() {
         setOpen(false);
     };
 
-    const deleteItem = ( element) => {
+    const deleteItem = (element) => {
         const items = ArrayList.filter(item => item.id !== element.id);
         let unreadCount = items.filter(item => item.isRead === false)
         setUnreadCount(unreadCount.length)
@@ -110,18 +112,24 @@ export default function MiniDrawer() {
         SetArrayList(items)
 
     }
-    const read = ( im) => {
-    
+    const read = (im) => {
+
         im.isRead = true
         let unreadCount = ArrayList.filter(item => item.isRead === false)
         setUnreadCount(unreadCount.length)
 
     }
 
-    const onFlag = ( im) => {
+    const onFlag = (im) => {
         im.isFlag = true
         let flagarray = ArrayList.filter(item => item.isFlag === true)
         setFlagCount(flagarray.length)
+    }
+    const onUnFlag = (im) => {
+        im.isFlag = false
+        let flagarray = ArrayList.filter(item => item.isFlag === true)
+        setFlagCount(flagarray.length)
+
     }
     useEffect(() => {
         let flagarray = ArrayList.filter(item => item.isFlag === true)
@@ -192,15 +200,24 @@ export default function MiniDrawer() {
                     <ListItem button >
 
 
-                        <ListItemIcon>  <InboxIcon /> </ListItemIcon>
+                        <ListItemIcon>
+                            <Badge badgeContent={unreadCount} >
+                                <InboxIcon />
+                            </Badge>
+                        </ListItemIcon>
 
-                        <ListItemText>Inbox</ListItemText>{unreadCount}
+                        <ListItemText>Inbox</ListItemText>
                     </ListItem>
                     <ListItem button >
-                        <ListItemIcon> <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg></ListItemIcon>
+                        <ListItemIcon>
+                            <Badge badgeContent={flagCount} >
+                                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg>
+
+                            </Badge>
+                        </ListItemIcon>
                         <ListItemText>Flagged</ListItemText>
 
-                        <ListItemText />{flagCount}
+                        <ListItemText />
                     </ListItem>
 
                 </List>
@@ -215,12 +232,12 @@ export default function MiniDrawer() {
                         <ListItem button key={text.id}>
                             <ListItemText primary={text.message} onClick={() => read(text)} />
 
-                            <DeleteIcon onClick={() => deleteItem( text)} ></DeleteIcon>
+                            <DeleteIcon onClick={() => deleteItem(text)} ></DeleteIcon>
                             <div>
 
                                 {text.isFlag ?
-                                    <svg xmlns="http://www.w3.org/2000/svg" onClick={() => onFlag( text)} height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg> :
-                                    <img className="imges" src={Flag} alt="" onClick={() => onFlag( text)} />
+                                    <svg xmlns="http://www.w3.org/2000/svg" onClick={() => onUnFlag(text)} height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg> :
+                                    <img className="imges" src={Flag} alt="" onClick={() => onFlag(text)} />
 
                                 }
                             </div>

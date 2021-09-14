@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import MiniDrawer from './components/demo'
+import Demo from './components/demo'
 function App() {
   return (
     <div className="App">
-      <MiniDrawer></MiniDrawer>
+      <Demo></Demo>
     </div>
   );
 }
