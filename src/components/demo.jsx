@@ -140,18 +140,10 @@ export default function Demo() {
     }, [])
 
     const SearchHandler = (e) => {
-        console.log(e.target.value.length);
         setSearchText(e.target.value)
         setsearch(ArrayList)
-        let msg = ArrayList
-        console.log(msg);
-        if (!e.target.value) {
-            console.log(msg);
-            console.log(" in side ", e.target.value.length);
-            SetArrayList(msg)
-            // return ArrayList
-            console.log(ArrayList);
-        } else {
+      
+      
 
             let filtered = ArrayList.filter(item => {
                 if (item.message.includes(e.target.value)) {
@@ -162,31 +154,12 @@ export default function Demo() {
             })
             setsearch(filtered)
 
-            // let data = searching(ArrayList, e.target.value)
-            // setsearch(data)
-            // SetArrayList(data)
-
-            // console.log(searcharray);
-        }
+        
+    
 
     }
 
-    const searching = (value, arg) => {
-        let filtered = value.filter(item => {
-            if (item.message.includes(arg)) {
-                return item
-            } else {
-                return;
-            }
-        })
-        if (filtered.length > 0) {
-            return filtered
-        } else {
-            return value
-
-        }
-        // SetArrayList(filtered)
-    }
+ 
     return (
         <div className={classes.root}>
             <CssBaseline />
