@@ -92,6 +92,7 @@ export default function Demo() {
     const [flagCount, setFlagCount] = React.useState(0);
     const [unreadCount, setUnreadCount] = React.useState(0);
     const [searchtext, setSearchText] = React.useState('')
+    const [searcharray, setsearch] = React.useState([])
 
     const [ArrayList, SetArrayList] = React.useState(data)
 
@@ -139,16 +140,52 @@ export default function Demo() {
     }, [])
 
     const SearchHandler = (e) => {
-        console.log(e.target.value);
+        console.log(e.target.value.length);
         setSearchText(e.target.value)
-        let filtered = ArrayList.filter(item => {
-            if (item.message.includes(e.target.value)) {
+        setsearch(ArrayList)
+        let msg = ArrayList
+        console.log(msg);
+        if (!e.target.value) {
+            console.log(msg);
+            console.log(" in side ", e.target.value.length);
+            SetArrayList(msg)
+            // return ArrayList
+            console.log(ArrayList);
+        } else {
+
+            let filtered = ArrayList.filter(item => {
+                if (item.message.includes(e.target.value)) {
+                    return item
+                } else {
+                    return;
+                }
+            })
+            setsearch(filtered)
+
+            // let data = searching(ArrayList, e.target.value)
+            // setsearch(data)
+            // SetArrayList(data)
+
+            // console.log(searcharray);
+        }
+
+    }
+
+    const searching = (value, arg) => {
+        let filtered = value.filter(item => {
+            if (item.message.includes(arg)) {
                 return item
             } else {
                 return;
             }
         })
-        SetArrayList(filtered)
+        if (filtered.length > 0) {
+            return filtered
+        } else {
+            return value
+
+        }
+        // SetArrayList(filtered)
     }
     return (
         <div className={classes.root}>
@@ -171,7 +208,7 @@ export default function Demo() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <TextField id="outlined-search" onChange={(e) => SearchHandler(e)} name={searchtext} label="Search field" type="search" variant="outlined" />
+                    <TextField id="outlined-search" onChange={(e) => SearchHandler(e)} label="Search field" type="search" variant="outlined" />
 
                 </Toolbar>
             </AppBar>
@@ -226,26 +263,45 @@ export default function Demo() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-
                 <List>
-                    {ArrayList.map((text, index) => (
-                        <ListItem button key={text.id}>
-                            <ListItemText primary={text.message} onClick={() => read(text)} />
+                    {searchtext.length > 0 ? <div>
+                        {searcharray.map((text, index) => (
+                            <ListItem button key={text.id}>
+                                <ListItemText primary={text.message} onClick={() => read(text)} />
 
-                            <DeleteIcon onClick={() => deleteItem(text)} ></DeleteIcon>
-                            <div>
+                                <DeleteIcon onClick={() => deleteItem(text)} ></DeleteIcon>
+                                <div>
 
-                                {text.isFlag ?
-                                    <svg xmlns="http://www.w3.org/2000/svg" onClick={() => onUnFlag(text)} height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg> :
-                                    <img className="imges" src={Flag} alt="" onClick={() => onFlag(text)} />
+                                    {text.isFlag ?
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => onUnFlag(text)} height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg> :
+                                        <img className="imges" src={Flag} alt="" onClick={() => onFlag(text)} />
 
-                                }
-                            </div>
+                                    }
+                                </div>
 
 
-                        </ListItem>
-                    ))}
+                            </ListItem>
+                        ))}</div> : <div>
+                        {ArrayList.map((text, index) => (
+                            <ListItem button key={text.id}>
+                                <ListItemText primary={text.message} onClick={() => read(text)} />
+
+                                <DeleteIcon onClick={() => deleteItem(text)} ></DeleteIcon>
+                                <div>
+
+                                    {text.isFlag ?
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => onUnFlag(text)} height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none" /><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z" /></svg> :
+                                        <img className="imges" src={Flag} alt="" onClick={() => onFlag(text)} />
+
+                                    }
+                                </div>
+
+
+                            </ListItem>
+                        ))}
+                    </div>}
                 </List>
+
 
             </main>
         </div>
